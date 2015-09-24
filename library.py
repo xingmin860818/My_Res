@@ -8,18 +8,14 @@ class Library(object):
                 self.book_list[b_id] = b_name
         def del_book(self,b_id):
                 self.book_list.pop(b_id)
-        def search_book(self,student):
+        def search_book(self,*args):
                 exist_book = {}
-                for bookid in self.book_list:
-                        if isinstance(student,str):
-                                if student == self.book_list[bookid]:
-                                        return 'BOOK_ID: %d\tBOOK_NAME: %s' % (bookid,student)
-                                else:
-                                        return 'Sorry,we cannot find the book you need'
-                        elif isinstance(student,object):
-                                for bookname in student.search_book():
-                                        if bookname == self.book_list[bookid]:
-                                                exist_book[bookid] = bookname
+                for book_msg in args:
+                        for bookid in self.book_list:
+                                if book_msg == self.book_list[bookid]:
+                                        exist_book[bookid] = book_msg
+                                elif book_msg == bookid:
+                                        exist_book[book_msg] = self.book_list[book_msg]
                 return exist_book
         def lend_book(self,student):
                 for bookid in self.book_list:
@@ -53,14 +49,9 @@ lib1.add_book(1002,'Mysql')
 lib1.add_book(1003,'Redis')
 
 tom = Student(76351,'Tom')
-tom.add_search('Python')
-tom.add_search('Redis')
-tom.add_search('UFO')
 print '_'*60
 print 'We just found these book from our library:\n'
-print lib1.search_book(tom)
+print lib1.search_book('Python',1003,'Mysql')
 tom.add_borrow('Redis')
 tom.add_borrow(1001)
 print lib1.lend_book(tom)
-
-                                                  
