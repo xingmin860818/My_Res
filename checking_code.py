@@ -3,23 +3,26 @@
 import random
 import string
 
-#生成一个包含大写，小写字母和数字的列表
-L = []
-#将ASCII码转换为对应字母和符号
-chars = map(chr,range(65,123))
-for words in chars:
-	#通过isalpha函数过滤掉非字母字符
-	if words.isalpha():
-		L.append(words)
-for num in range(0,2):
-	L.append(str(num))
+def gener_list():
+        #生成一个包含大写，小写字母和数字的列表
+        L = []
+        #将ASCII码转换为对应字母和符号
+        chars = map(chr,range(65,123))
+        for words in chars:
+                #通过isalpha函数过滤掉非字母字符
+                if words.isalpha():
+                        L.append(words)
+        for num in range(0,2):
+                L.append(str(num))
+        return L
+
 
 #定义函数,生成任意长度随机数
 def gener_random(n):
 	if n == 0:
 		return ""
 	else:
-		x = random.choice(L)
+		x = random.choice(gener_list())
 		#递归生成n位随机数
 		rand_num = x + str(gener_random(n-1)) 
 		return rand_num
