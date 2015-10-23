@@ -2,39 +2,45 @@
 #-*-coding:utf8-*-
 
 class BackPack(object):
-	def __init__(self):
-		#定义包中物品列表
-		self.bag_list = []
-		#定义空包物品的初始值
-		self.total_size = 0
-	def list_stuffs(self):
-		#查看包内物品和占用量
-		return self.bag_list,self.total_size
-	def add_stuffs(self,stuffs,size):
-		#定义存放物品，需要输入物品名称和对应占空间量
-		self.stuff_dic = {}
-		#包的最大容量是70L，如果存放物品累加达到这个值就会提示错误,并且实时返回剩余空间
-        	if (self.total_size+size) <= 70:
-                	print 'you can put less than %s things in it' % (70 - self.total_size)
-			self.stuff_dic[stuffs] = size
-        		self.total_size += size
-			self.bag_list.append(self.stuff_dic)
-		else:
-			print 'Bag is full,cannot put %s in it' % stuffs
-	def get_stuffs(self,stuffs):
-		#取物品，匹配到多个相同物品，只从中取一个
-		for i in self.bag_list:
-			for k in i:
-				if k == stuffs:
-					self.bag_list.pop(self.bag_list.index(i))
-					self.total_size -= i[k]
-					break
-
-b = BackPack()
-b.add_stuffs('apple',30)
-b.add_stuffs('apple',20)
-b.add_stuffs('pair',10)
-b.add_stuffs('banana',30)
-print b.list_stuffs()
-b.get_stuffs('apple')
-print b.list_stuffs()
+        def __init__(self):
+                #初始化物品存放字典
+                self.stuff_dic = {}
+                #初始化包的最大容量
+                self.max_size = 100
+                #初始化包内0物品值
+                self.stuffs_size = 0
+        #查看包内物品
+        def show_stuffs(self):
+                return self.stuff_dic
+        #查看保内剩余空间
+        def show_free_space(self):
+                return(self.max_size - self.stuffs_size)
+        #向包内存放物品，有名称，数量和大小
+        def add_stuff(self,stuff,num,size):
+                try:
+                        #根据物品数量乘以大小向包内存放，如果最大量存不下就减少一个，知道能存下为止
+                        for i in range(1,num+1)[::-1]:
+                                if self.stuffs_size + i*size <= self.max_size:
+                                        self.stuff_dic[stuff] = [i,i*size]
+                                        self.stuffs_size += i*size
+                                        return 'you can only put %s\'s %s in it' % (i,stuff)
+                                else:
+                                        continue
+                except TypeError,e:
+                        raise
+        #从包内去物品
+        def get_stuff(self,stuff,num):
+                try:
+                        #根据输入的物品名称从字典中查找匹配物品
+                        for k in self.stuff_dic:
+                                if k == stuff:
+                                        #找到相应物品，取出输入数量，字典内相应减少数量和增加剩余空间
+                                        x = self.stuff_dic[k]
+                                        self.stuffs_size -= num*(x[1]/x[0])
+                                        x[1] -= num*(x[1]/x[0])
+                                        x[0] -= num
+                                        if x[0] == 0:
+                                                self.stuff_dic.pop(stuff)
+                                                break
+                except TypeError:
+                        raise
