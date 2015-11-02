@@ -4,9 +4,9 @@ from sales import goods_price
 class Test_price(unittest.TestCase):
         def test_prices(self):
                 d = goods_price(a=1000,b=900,c=30000)
-                self.assertEquals(d['a'],640)
-                self.assertEquals(d['b'],576.00)
-                self.assertEquals(d['c'],19200.00)
+                self.assertEquals(d['a'],'640.00')
+                self.assertEquals(d['b'],'576.00')
+                self.assertEquals(d['c'],'19200.00')
                 self.assertTrue(isinstance(d,dict))
         def test_key_error(self):
                 with self.assertRaises(TypeError):
