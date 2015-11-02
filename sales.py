@@ -1,33 +1,32 @@
 #!/usr/bin/env python
+#-*-coding:utf8-*-
 ''' 
 Used to show the price of the same goods,at different
 festival
 '''
-def weekday_deco(func):
-        def wrapper(**kw):
-                try:
-                        func(**kw)
-                        d = {x:kw[x]*0.9 for x in kw}
-                        return d
-                except TypeError:
-                        raise TypeError(r'you should input argument like this: a=100')
+#####周末打8折######
+def weekend(func):
+        def wrapper(price):
+                discount = 0.8
+                return func(price)*discount
         return wrapper
-def duble_eleven_deco(func):
-        def wrapper(**kw):
-                try:
-                        func(**kw)
-                        d = {x:kw[x]*0.8 for x in kw}
-                        return d
-                except TypeError:
-                        raise TypeError(r'you should input argument like this: a=100')
+#####双11打8折#####
+def double_eleven(func):
+        def wrapper(price):
+                discount = 0.8
+                return func(price)*discount
         return wrapper
 
+#####打折叠加#####
+@weekend
+@double_eleven
+def price(price):
+        return price
 
+#####商品定价####
+def goods_price(**kw):
+        dic = {}
+        for k,v in kw.iteritems():
+                dic[k] = '%.2f' % price(v)
+        return dic
 
-@weekday_deco
-@duble_eleven_deco
-def set_price(**kw):
-        return kw
-
-#print set_price(Iphone=5000,NIKE=600,ThinkPad=5500)
-#{'NIKE': 540.0, 'Iphone': 4500.0, 'ThinkPad': 4950.0}
